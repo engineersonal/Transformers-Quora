@@ -79,8 +79,11 @@
 
                 <configuration>
                     <driver>${postgresql.driver.name}</driver>
+                    <!--suppress UnresolvedMavenProperty -->
                     <url>jdbc:postgresql://${server.host}:${server.port}/${database.name}</url>
+                    <!--suppress UnresolvedMavenProperty -->
                     <username>${database.user}</username>
+                    <!--suppress UnresolvedMavenProperty -->
                     <password>${database.password}</password>
                     <autocommit>true</autocommit>
                     <onError>abort</onError>
