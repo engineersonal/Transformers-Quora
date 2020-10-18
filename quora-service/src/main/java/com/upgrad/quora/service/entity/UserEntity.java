@@ -16,7 +16,6 @@ import java.io.Serializable;
         @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email"),
         @NamedQuery(name = "userByUserName", query = "select u from UserEntity u where u.userName = :userName"),
         @NamedQuery(name ="userByUuid",query="select u from UserEntity u where u.uuid =:uuid"),
-        @NamedQuery(name = "userByUsername", query = "select u from UserEntity u where u.username=:username"),
         @NamedQuery(name = "userByEmailId", query = "select u from UserEntity u where u.email=:email")
 
 })
