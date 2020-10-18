@@ -20,6 +20,7 @@ public class PasswordCryptographyProvider {
     private static int HASHING_ITERATIONS = 1000;
     private static int HASHING_KEY_LENGTH = 64;
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    //Logger logger = LoggerFactory.getLogger(PasswordCryptographyProvider.class);
 
     /**
      * This method generates Salt and hashed Password
@@ -29,7 +30,9 @@ public class PasswordCryptographyProvider {
      */
     public String[] encrypt(final String password) {
         byte[] salt = generateSaltBytes();
+        //logger.info("encrypt method salt :"salt);
         byte[] hashedPassword = hashPassword(password.toCharArray(), salt);
+        //logger.info("hashedpwd :"hashedPassword);
         return new String[]{getBase64EncodedBytesAsString(salt), bytesToHex(hashedPassword)};
     }
 
