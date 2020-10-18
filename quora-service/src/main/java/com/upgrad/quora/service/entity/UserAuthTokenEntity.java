@@ -1,115 +1,112 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.upgrad.quora.service.entity;
-
+/***Author : Anitha Rajamuthu 
+ * Date: 17-Oct-2020
+ * UserAuth Entity against user_auth table
+ ****/
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
-/**
- *
- * @author nmu
- */
 @Entity
-@Table(name = "user_auth", schema = "quora")
-@NamedQueries(
-        {
-                @NamedQuery(name = "userAuthByToken", query = "select u from UserAuthTokenEntity u where u.accessToken =:token")
-                ,
-                @NamedQuery(name = "userAuthByUserId", query = "select u from UserAuthTokenEntity u where u.user.uuid =:user_id")
-        }
-)
-
+@Table(name = "user_auth")
+@NamedQueries({
+        @NamedQuery(name = "userAuthTokenByAccessToken", query = "select ut from UserAuthTokenEntity ut where ut.accessToken = :accessToken "),
+        @NamedQuery(name="userAuthTokenByUuid",query="select ut from UserAuthTokenEntity ut where ut.uuid = :uuid")
+})
 public class UserAuthTokenEntity implements Serializable {
-
+    //primary key
     @Id
-    @Column(name = "id")
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "uuid")
+    @Column(name = "UUID")
     @Size(max = 200)
     private String uuid;
-
+    //foreign key
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "USER_ID")
     private UserEntity user;
 
-    @Column(name = "access_token")
+    @Column(name = "ACCESS_TOKEN")
+    @NotNull
     @Size(max = 500)
     private String accessToken;
 
-    @Column(name = "expires_at")
-    private LocalDateTime expiresAt;
+    @Column(name = "LOGIN_AT")
+    @NotNull
+    private ZonedDateTime loginAt;
 
-    @Column(name = "login_at")
-    private LocalDateTime loginAt;
+    @Column(name = "EXPIRES_AT")
+    @NotNull
+    private ZonedDateTime expiresAt;
 
-    @Column(name = "logout_at")
-    private LocalDateTime logoutAt;
+    @Column(name = "LOGOUT_AT")
+    private ZonedDateTime logoutAt;
 
     public Integer getId() {
         return id;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public LocalDateTime getExpiresAt() {
-        return expiresAt;
-    }
-
-    public LocalDateTime getLoginAt() {
-        return loginAt;
-    }
-
-    public LocalDateTime getLogoutAt() {
-        return logoutAt;
     }
 
     public void setId(Integer id) {
         this.id = id;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public UserEntity getUser() {
+        return user;
     }
 
     public void setUser(UserEntity user) {
         this.user = user;
     }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
+
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
 
-    public void setExpiresAt(LocalDateTime expiresAt) {
-        this.expiresAt = expiresAt;
+    public ZonedDateTime getLoginAt() {
+        return loginAt;
     }
 
-    public void setLoginAt(LocalDateTime loginAt) {
+    public void setLoginAt(ZonedDateTime loginAt) {
         this.loginAt = loginAt;
     }
 
-    public void setLogoutAt(LocalDateTime logoutAt) {
+    public ZonedDateTime getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(ZonedDateTime expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
+    public ZonedDateTime getLogoutAt() {
+        return logoutAt;
+    }
+
+    public void setLogoutAt(ZonedDateTime logoutAt) {
         this.logoutAt = logoutAt;
     }
 
@@ -127,5 +124,4 @@ public class UserAuthTokenEntity implements Serializable {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
-
 }

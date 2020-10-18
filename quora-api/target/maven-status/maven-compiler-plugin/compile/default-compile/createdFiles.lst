@@ -19,7 +19,13 @@ com\upgrad\quora\api\model\SignupUserRequest.class
 io\swagger\api\ApiOriginFilter.class
 com\upgrad\quora\api\controller\QuestionController.class
 io\swagger\Swagger2SpringBoot$ExitException.class
+<<<<<<< HEAD
 com\upgrad\quora\api\exception\RestExceptionHandler.class
+=======
+com\upgrad\quora\api\controller\UserController.class
+com\upgrad\quora\api\exception\RestExceptionHandler.class
+com\upgrad\quora\api\controller\AnswerController.class
+>>>>>>> 097773e9249a9bc92de89fbeb54ff213e71a0cc4
 io\swagger\api\NotFoundException.class
 com\upgrad\quora\api\model\QuestionEditRequest.class
 io\swagger\RFC3339DateFormat.class
