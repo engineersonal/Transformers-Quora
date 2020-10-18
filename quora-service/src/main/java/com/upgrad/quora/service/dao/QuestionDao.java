@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.upgrad.quora.service.dao;
 
 import com.upgrad.quora.service.entity.QuestionEntity;
+import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -19,44 +15,38 @@ public class QuestionDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public QuestionEntity createQuestionForUser(QuestionEntity questionEntity) {
-
+    //Named queries created according to the functionality as suggested by the name of the respective methods
+    public QuestionEntity createQuestion(QuestionEntity questionEntity) {
         entityManager.persist(questionEntity);
         return questionEntity;
     }
-
-    public List<QuestionEntity> getAllQuestions() {
-
-        return entityManager.createNamedQuery("getAllQuestions", QuestionEntity.class).getResultList();
-    }
-
-    public QuestionEntity editQuestion(QuestionEntity questionEntity) {
-
-        entityManager.merge(questionEntity);
-        return questionEntity;
-    }
-
-    public QuestionEntity deleteQuestion(QuestionEntity questionEntity) {
-
-        entityManager.remove(questionEntity);
-        return questionEntity;
-    }
-
-    public QuestionEntity getQuestionByUuid(String uuid) {
-
+    public QuestionEntity getQuestionByQUuid(final String uuid) {
         try {
-            return entityManager.createNamedQuery("getQuestByUuid", QuestionEntity.class).setParameter("uuid", uuid).getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
-        }
-    }
-
-    public List <QuestionEntity> getAllQuestionsByUser(final String uuid) {
-        try {
-            return entityManager.createNamedQuery("allQuestionsByUserId", QuestionEntity.class).setParameter("uuid", uuid).getResultList();
+            return entityManager.createNamedQuery("questionByQUuid", QuestionEntity.class).setParameter("uuid", uuid).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
     }
-
+    public List<QuestionEntity> getAllQuestionsByUserId(final UserEntity user){
+        try {
+            return entityManager.createNamedQuery("allQuestionsByUserId", QuestionEntity.class).setParameter("user", user).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+    public List<QuestionEntity> getAllQuestions(){
+        try {
+            return entityManager.createNamedQuery("allQuestions", QuestionEntity.class).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+    public QuestionEntity updateQuestion(final QuestionEntity questionEntity) {
+        return entityManager.merge(questionEntity);
+    }
+    public String deleteQuestion(final QuestionEntity questionEntity) {
+        String uuid=questionEntity.getUuid();
+        entityManager.remove(questionEntity);
+        return uuid;
+    }
 }
