@@ -20,7 +20,13 @@ public class SignoutBusinessService {
         @Autowired
         private UserDao userDao;
 
-        //Checks whether a user has signed out based on accessToken
+        /**
+         * This method is used by user to signout.
+         *
+         * @param accessToken Access token of the user.
+         * @return UserEntity details of the signed out user.
+         * @throws SignOutRestrictedException SGR-001 if the access-token is not present in the DB.
+         */
         @Transactional(propagation = Propagation.REQUIRED)
         public UserAuthTokenEntity verifyAuthToken(final String accessToken) throws SignOutRestrictedException {
             UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(accessToken);

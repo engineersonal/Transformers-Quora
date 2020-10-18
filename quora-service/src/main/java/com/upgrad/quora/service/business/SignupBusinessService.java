@@ -20,8 +20,17 @@ public class SignupBusinessService {
 
     @Autowired
     private PasswordCryptographyProvider passwordCryptographyProvider;
+    
+    //Logger logger = LoggerFactory.getLogger(SignupBusinessService.class);
 
-    //Creates user based on signup request form and also checks for duplicate usernames and email ids while signup
+
+    /**
+     * This method checks if the username and email exist in the DB. if the username or email doesn't
+     * exist in the DB. Assign encrypted password and salt to the user.
+     *
+     * @throws SignUpRestrictedException SGR-001 if the username exist in the DB , SGR-002 if the
+     *     email exist in the DB.
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity signup(UserEntity userEntity,String userName,String email) throws SignUpRestrictedException {
         if (userDao.getUserByUserName(userName) != null) {
@@ -30,7 +39,9 @@ public class SignupBusinessService {
             throw new SignUpRestrictedException("SGR-002", "This user has already been registered, try with any other emailId");
         } else {
             //Generates encrypted password and salt based on the password provided by user during signup
-            String[] encryptedText = passwordCryptographyProvider.encrypt(userEntity.getPassword());
+           // logger.info("Inside signupbusiness password:"userEntity.getPassword());
+
+        	String[] encryptedText = passwordCryptographyProvider.encrypt(userEntity.getPassword());
             userEntity.setSalt(encryptedText[0]);
             userEntity.setPassword(encryptedText[1]);
             return userDao.createUser(userEntity);

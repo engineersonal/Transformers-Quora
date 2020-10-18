@@ -33,7 +33,9 @@ import java.util.UUID;
 @RequestMapping("/")
 public class UserController {
     //Required services are autowired to enable access to methods defined in respective Business services
-    @Autowired
+	//Logger logger = LoggerFactory.getLogger(UserController.class);
+	 
+	@Autowired
     private SignupBusinessService signupBusinessService;
 
     @Autowired
@@ -42,11 +44,17 @@ public class UserController {
     @Autowired
     private SignoutBusinessService signoutBusinessService;
 
-    //signup method is used to create a new nonadmin user by collecting required user signup information from a signup request form
+    /**
+     * This method is for user signup. This method receives the object of SignupUserRequest type with
+     * its attributes being set.
+     *
+     * @return SignupUserResponse - UUID of the user created.
+     * @throws SignUpRestrictedException - if the username or email already exist in the database.
+     */
    @RequestMapping(method = RequestMethod.POST, path = "/user/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
        final UserEntity userEntity = new UserEntity();
-
+        //logger.info("Inside user controller");
         userEntity.setUuid(UUID.randomUUID().toString());
         userEntity.setFirstName(signupUserRequest.getFirstName());
         userEntity.setLastName(signupUserRequest.getLastName());
@@ -67,7 +75,15 @@ public class UserController {
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
    }
 
-   //signin method is used to perform a Basic authorization when the user tries to signin for the first time
+    /**
+     * This method is for a user to singin.
+     *
+     * @param authorization is basic auth (base 64 encoded). Usage: Basic <Base 64 Encoded
+     *     username:password>
+     * @return SigninResponse which contains user id and a access-token in the response header.
+     * @throws AuthenticationFailedException ATH-001 if username doesn't exist, ATH-002 if password is
+     *     wrong.
+     */
    @RequestMapping(method = RequestMethod.POST, path = "/user/signin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
         public ResponseEntity<SigninResponse> login(@RequestHeader("authentication") final String authentication) throws AuthenticationFailedException {
           byte[] decode = Base64.getDecoder().decode(authentication.split("Basic ")[1]);
@@ -85,7 +101,13 @@ public class UserController {
           return new ResponseEntity<SigninResponse>(  signinResponse, headers, HttpStatus.OK);
    }
 
-   //signout method is used to signout a signedin user from the application
+    /**
+     * This method is used to signout user.
+     *
+     * @param accessToken Token used for authenticating the user.
+     * @return UUID of the user who is signed out.
+     * @throws SignOutRestrictedException if the
+     */
    @RequestMapping(method=RequestMethod.POST,path="/user/signout",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
    public ResponseEntity<SignoutResponse> logout(@RequestHeader("accessToken") final String accessToken)throws SignOutRestrictedException {
        String [] bearerToken = accessToken.split("Bearer ");
