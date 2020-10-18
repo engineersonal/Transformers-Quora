@@ -27,7 +27,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity getUser(String targetUuid, String token) throws AuthorizationFailedException, UserNotFoundException {
 
-        UserAuthTokenEntity userAuth = userDao.getUserAuthByToken(token);
+        UserAuthTokenEntity userAuth = userDao.getUserAuthToken(token);
         if (userAuth == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }

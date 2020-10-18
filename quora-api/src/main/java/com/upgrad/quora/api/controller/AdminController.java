@@ -2,6 +2,7 @@ package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.service.business.AdminService;
 import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.api.model.UserDeleteResponse;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.UserNotFoundException;
@@ -22,8 +23,8 @@ public class AdminController {
     public ResponseEntity<com.upgrad.quora.api.model.UserDeleteResponse> deleteUser(@PathVariable("userId") final String userid, @RequestHeader("authorization")
     final String authorization) throws AuthenticationFailedException, AuthorizationFailedException, UserNotFoundException {
 
-        UserEntity uuid = adminService.deleteUser(userid ,authorization);
-        com.upgrad.quora.api.model.UserDeleteResponse userDeleteResponse=new com.upgrad.quora.api.model.UserDeleteResponse().id(uuid.getUuid()).status("USER SUCCESSFULLY DELETED");
-        return new ResponseEntity<com.upgrad.quora.api.model.UserDeleteResponse>(userDeleteResponse, HttpStatus.OK);
+        UserEntity userEntity = adminService.deleteUser(userid ,authorization);
+        UserDeleteResponse userDeleteResponse = new UserDeleteResponse().id(userEntity.getUuid()).status("USER SUCCESSFULLY DELETED");
+        return new ResponseEntity<UserDeleteResponse>(userDeleteResponse, HttpStatus.OK);
     }
 }
