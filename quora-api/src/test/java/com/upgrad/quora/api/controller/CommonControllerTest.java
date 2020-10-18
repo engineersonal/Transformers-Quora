@@ -31,7 +31,8 @@ public class CommonControllerTest {
     //This test case passes when you try to get the details of the existing user but the JWT token entered does not exist in the database.
     @Test
     public void detailsUsingNonExistingAccessToken() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/userprofile/database_uuid1").header("authorization", "non_existing_access_token"))
+        mvc.perform(MockMvcRequestBuilders.get("/userprofile/database_uuid1").
+                header("authorization", "non_existing_access_token"))
                 .andExpect(status().isForbidden())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("ATHR-001"));
     }
