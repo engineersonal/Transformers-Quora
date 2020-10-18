@@ -21,11 +21,12 @@ public class CommonController {
     @RequestMapping(method = RequestMethod.GET, path = "/userprofile/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDetailsResponse> getUserProfileById(@PathVariable("userId") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
         UserEntity userEntity = userService.getUser(userUuid, authorization);
-        UserDetailsResponse userDetailsResponse = new UserDetailsResponse().firstName(userEntity.getFirstname())
+      /*  UserDetailsResponse userDetailsResponse = new UserDetailsResponse().firstName(userEntity.getFirstname())
                 .lastName(userEntity.getLastname()).userName(userEntity.getUsername())
                 .emailAddress(userEntity.getEmail()).contactNumber(userEntity.getContactNumber())
                 .dob(userEntity.getDob()).country(userEntity.getCountry()).aboutMe(userEntity.getAboutMe());
-        return new ResponseEntity<UserDetailsResponse>(userDetailsResponse, HttpStatus.OK);
+        return new ResponseEntity<UserDetailsResponse>(userDetailsResponse, HttpStatus.OK);*/
+        return null;
 
 
     }
