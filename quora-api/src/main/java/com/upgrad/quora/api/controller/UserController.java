@@ -1,5 +1,8 @@
 package com.upgrad.quora.api.controller;
-//Author : Anitha Rajamuthu - New
+/***Author : Anitha Rajamuthu 
+ * Date: 17-Oct-2020
+ * User Controller class for signup,signin and signout API
+ ****/
 import com.upgrad.quora.api.model.SigninResponse;
 import com.upgrad.quora.api.model.SignoutResponse;
 import com.upgrad.quora.api.model.SignupUserRequest;
@@ -25,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Base64;
 import java.util.UUID;
 
-//RestController annotation specifies that this class represents a REST API(equivalent of @Controller + @ResponseBody)
+
 @RestController
 @RequestMapping("/")
 public class UserController {
@@ -56,7 +59,7 @@ public class UserController {
         userEntity.setSalt("1234abc");
         userEntity.setPassword(signupUserRequest.getPassword());
         userEntity.setRole("nonadmin");
-
+        //call signupservice method signup
         final UserEntity createdUserEntity = signupBusinessService.signup(userEntity,signupUserRequest.getUserName(),signupUserRequest.getEmailAddress());
         SignupUserResponse userResponse = new SignupUserResponse()
                 .id(createdUserEntity.getUuid())
@@ -64,12 +67,13 @@ public class UserController {
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
    }
 
-   //login method is used to perform a Basic authorization when the user tries to signin for the first time
+   //signin method is used to perform a Basic authorization when the user tries to signin for the first time
    @RequestMapping(method = RequestMethod.POST, path = "/user/signin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
         public ResponseEntity<SigninResponse> login(@RequestHeader("authentication") final String authentication) throws AuthenticationFailedException {
           byte[] decode = Base64.getDecoder().decode(authentication.split("Basic ")[1]);
           String decodedText = new String(decode);
           String[] decodedArray = decodedText.split(":");
+          //call signinservice method authenticate
           final UserAuthTokenEntity userAuthToken = signinBusinessService.authenticate(decodedArray[0], decodedArray[1]);
           UserEntity user = userAuthToken.getUser();
 
@@ -81,10 +85,11 @@ public class UserController {
           return new ResponseEntity<SigninResponse>(  signinResponse, headers, HttpStatus.OK);
    }
 
-   //logout method is used to signout a signedin user from the application
+   //signout method is used to signout a signedin user from the application
    @RequestMapping(method=RequestMethod.POST,path="/user/signout",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
    public ResponseEntity<SignoutResponse> logout(@RequestHeader("accessToken") final String accessToken)throws SignOutRestrictedException {
        String [] bearerToken = accessToken.split("Bearer ");
+       //call signoutservice method verifyAuthToken
        final UserAuthTokenEntity userAuthTokenEntity=signoutBusinessService.verifyAuthToken(bearerToken[1]);
 
        SignoutResponse signoutResponse=new SignoutResponse()

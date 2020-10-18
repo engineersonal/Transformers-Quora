@@ -1,5 +1,8 @@
 package com.upgrad.quora.service.business;
-
+/***Author : Anitha Rajamuthu 
+ * Date: 17-Oct-2020
+ * SignoutBusiness service for verifyAuthToken
+ ****/
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.exception.SignOutRestrictedException;

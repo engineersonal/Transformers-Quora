@@ -1,5 +1,8 @@
 package com.upgrad.quora.service.entity;
-
+/***Author : Anitha Rajamuthu 
+ * Date: 17-Oct-2020
+ * UserAuth Entity against user_auth table
+ ****/
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

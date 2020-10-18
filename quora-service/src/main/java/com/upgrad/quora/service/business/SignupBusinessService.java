@@ -1,5 +1,8 @@
 package com.upgrad.quora.service.business;
-
+/***Author : Anitha Rajamuthu 
+ * Date: 17-Oct-2020
+ * SignupBusiness service for user signup
+ ****/
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;

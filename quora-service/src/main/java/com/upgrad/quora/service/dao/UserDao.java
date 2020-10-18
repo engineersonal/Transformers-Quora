@@ -1,5 +1,8 @@
 package com.upgrad.quora.service.dao;
-
+/***Author : Anitha Rajamuthu 
+ * Date: 17-Oct-2020
+ * UserDAO with methods
+ ****/
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.stereotype.Repository;
