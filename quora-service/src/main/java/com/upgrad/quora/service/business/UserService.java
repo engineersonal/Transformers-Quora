@@ -24,6 +24,16 @@ public class UserService {
     @Autowired
     PasswordCryptographyProvider passwordCryptographyProvider;
 
+    /**
+     * Gets the user profile details
+     *
+     * @param targetUuid: Contains the user id
+     * @param token: To authenticate the user
+     * @return UserEntity: Returns the User Entity
+     * @throws AuthorizationFailedException ATHR-001: if User has not signed in
+     *                                      ATHR-002: if the User is signed out
+     * @throws UserNotFoundException USR-001: User with entered uuid to be deleted does not exist
+     */
     //getUser method considers user id and access token as inputs and gets the profile details of a user
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity getUser(String targetUuid, String token) throws AuthorizationFailedException, UserNotFoundException {

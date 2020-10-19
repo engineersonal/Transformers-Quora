@@ -18,6 +18,14 @@ public class CommonController {
     @Autowired
     private UserService userService;
 
+    /** Gets the user profile details
+     * @param userId: to delete a specific user
+     * @param authorization: access token to authenticate user
+     * @return UserDetailsResponse entity
+     * @throws AuthorizationFailedException ATHR-001: if User has not signed in
+     *                                      ATHR-002: if the User is signed out
+     * @throws UserNotFoundException USR-001: User with entered user id does not exist
+     */
     //getUserProfileById method considers user id and authorization as inputs and gets the profile details of a user
     @RequestMapping(method = RequestMethod.GET, path = "/userprofile/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDetailsResponse> getUserProfileById(@PathVariable("userId") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {

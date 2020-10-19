@@ -33,7 +33,6 @@ import java.util.UUID;
 @RequestMapping("/")
 public class UserController {
     //Required services are autowired to enable access to methods defined in respective Business services
-	//Logger logger = LoggerFactory.getLogger(UserController.class);
 	 
 	@Autowired
     private SignupBusinessService signupBusinessService;
@@ -54,7 +53,6 @@ public class UserController {
    @RequestMapping(method = RequestMethod.POST, path = "/user/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
        final UserEntity userEntity = new UserEntity();
-        //logger.info("Inside user controller");
         userEntity.setUuid(UUID.randomUUID().toString());
         userEntity.setFirstName(signupUserRequest.getFirstName());
         userEntity.setLastName(signupUserRequest.getLastName());
@@ -106,13 +104,11 @@ public class UserController {
      *
      * @param accessToken Token used for authenticating the user.
      * @return UUID of the user who is signed out.
-     * @throws SignOutRestrictedException if the
+     * @throws SignOutRestrictedException if the user is not signed in
      */
    @RequestMapping(method=RequestMethod.POST,path="/user/signout",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
    public ResponseEntity<SignoutResponse> logout(@RequestHeader("authorization") final String accessToken)throws SignOutRestrictedException {
-//       String [] bearerToken = accessToken.split("Bearer ");
        //call signoutservice method verifyAuthToken
-//       final UserAuthTokenEntity userAuthTokenEntity=signoutBusinessService.verifyAuthToken(bearerToken[1]);
        final UserAuthTokenEntity userAuthTokenEntity=signoutBusinessService.verifyAuthToken(accessToken);
        SignoutResponse signoutResponse=new SignoutResponse()
                .id(userAuthTokenEntity.getUuid())

@@ -39,12 +39,20 @@ public class QuestionController {
     @Autowired
     DeleteQuestionBusinessService deleteQuestionBusinessService;
 
+    /**
+     * This API creates a question in the database.
+     *
+     * @param accessToken: To authenticate the user who is trying to create a question
+     * @param questionRequest: Contains the question content
+     * @return QuestionResponse entity
+     * @throws AuthorizationFailedException ATHR-001 If the user has not signed in and ATHR-002 If the
+     *     user is already signed out
+     */
     //createQuestion method takes accessToken for doing Bearer Authorization and creates the question by the signed in user
     @RequestMapping(method = RequestMethod.POST, path = "/question/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionResponse> createQuestion(@RequestHeader("authorization") final String accessToken,
                                                            final QuestionRequest questionRequest) throws AuthorizationFailedException {
-//        String[] bearerToken = accessToken.split("Bearer ");
-//        final UserAuthTokenEntity userAuthTokenEntity = createQuestionBusinessService.verifyAuthToken(bearerToken[1]);
+
         final UserAuthTokenEntity userAuthTokenEntity = createQuestionBusinessService.verifyAuthToken(accessToken);
         final QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setUuid(UUID.randomUUID().toString());
@@ -60,11 +68,17 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
+    /**
+     * This API gets all the questions
+     *
+     * @param accessToken: To authenticate the user
+     * @return List of QuestionDetailsResponse entity
+     * @throws AuthorizationFailedException ATHR-001 If the user has not signed in and ATHR-002 If the
+     *     user is already signed out
+     */
     //getAllQuestions method takes accessToken for doing Bearer Authorization and returns all the questions created
     @RequestMapping(method = RequestMethod.GET, path = "/question/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestions(@RequestHeader("authorization") final String accessToken) throws AuthorizationFailedException {
-//        String[] bearerToken = accessToken.split("Bearer ");
-//        getAllQuestionsBusinessService.verifyAuthToken(bearerToken[1]);
         getAllQuestionsBusinessService.verifyAuthToken(accessToken);
         List<QuestionEntity> allQuestions = new ArrayList<QuestionEntity>();
         allQuestions.addAll(getAllQuestionsBusinessService.getAllQuestions());
@@ -79,12 +93,20 @@ public class QuestionController {
         return new ResponseEntity<List<QuestionDetailsResponse>>(questionDetailsResponses,HttpStatus.OK);
     }
 
+    /**
+     * This API gets all the questions for a specific user
+     *
+     * @param accessToken: To authenticate the user who is trying to create a question
+     * @param userId: User Id
+     * @return List of QuestionDetailsResponse entity
+     * @throws AuthorizationFailedException ATHR-001: if User has not signed in
+     *                                      ATHR-002: if the User is signed out
+     * @throws UserNotFoundException USR-001: User with entered does not exist
+     */
     //getAllQuestionsByUser method takes userId to retrieve user and accessToken for doing Bearer Authorization and returns all the questions created by a specific user
     @RequestMapping(method = RequestMethod.GET, path = "question/all/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestionsByUser(@PathVariable("userId")final String userId,
                                                                                @RequestHeader("authorization") final String accessToken) throws AuthorizationFailedException, UserNotFoundException {
-//        String[] bearerToken = accessToken.split("Bearer ");
-//        getAllQuestionsByUserBusinessService.verifyAuthTokenAndUuid(userId,bearerToken[1]);
         getAllQuestionsByUserBusinessService.verifyAuthTokenAndUuid(userId,accessToken);
         final UserAuthTokenEntity userAuthTokenEntity= getAllQuestionsByUserBusinessService.getUserAuthTokenByUuid(userId);
         List<QuestionEntity> allQuestionsByUser = new ArrayList<QuestionEntity>();
@@ -100,13 +122,23 @@ public class QuestionController {
         return new ResponseEntity<List<QuestionDetailsResponse>>(questionDetailsResponses,HttpStatus.OK);
     }
 
+    /**
+     * This API edits the question which already exist in the database.
+     *
+     * @param accessToken: To authenticate the user who is trying to edit the question
+     * @param questionId: Id of the question which is to be edited
+     * @param questionEditRequest Contains the new content of the question
+     * @return QuestionEditResponse entity
+     * @throws AuthorizationFailedException ATHR-001 If the user has not signed in and ATHR-002 If the
+     *     user is already signed out and ATHR-003 if the user is not the owner of the question.
+     * @throws InvalidQuestionException QUES-001 if the question is not found in the database.
+     */
     //editQuestionContent method takes questionId to retrieve question and accessToken for doing Bearer Authorization and returns the edit question response
     @RequestMapping(method = RequestMethod.PUT, path = "/question/edit/{questionId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionEditResponse> editQuestionContent(final QuestionEditRequest questionEditRequest ,
                                                                     @PathVariable("questionId") final String questionId,
                                                                     @RequestHeader("authorization") final String accessToken) throws AuthorizationFailedException, InvalidQuestionException {
-//        String[] bearerToken = accessToken.split("Bearer ");
-//        final QuestionEntity questionEntity = editQuestionContentBusinessService.verifyUserStatus(questionId,bearerToken[1]);
+
         final QuestionEntity questionEntity = editQuestionContentBusinessService.verifyUserStatus(questionId,accessToken);
         questionEntity.setContent(questionEditRequest.getContent());
         final QuestionEntity updatedQuestionEntity = editQuestionContentBusinessService.updateQuestion(questionEntity);
@@ -117,13 +149,21 @@ public class QuestionController {
         return new ResponseEntity<QuestionEditResponse>(questionEditResponse, HttpStatus.OK);
     }
 
+    /**
+     * delete a question using questionId
+     *
+     * @param questionId id of the question to be deleted
+     * @param accessToken token to authenticate user
+     * @return QuestionDeleteResponse entity with Id and status of the question deleted
+     * @throws AuthorizationFailedException In case the access token is invalid.
+     * @throws InvalidQuestionException if question with questionId doesn't exist.
+     */
     //deleteQuestion method takes questionId to retrieve question and accessToken for doing Bearer Authorization and allows only the question owner or admin to delete the question
     @RequestMapping(method= RequestMethod.DELETE,path="/question/delete/{questionId}",produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@PathVariable("questionId") final String questionUuid,
                                                                  @RequestHeader("authorization") final String accessToken) throws AuthorizationFailedException, InvalidQuestionException {
-//        String [] bearerToken = accessToken.split("Bearer ");
+
         final QuestionEntity questionEntityToDelete=deleteQuestionBusinessService.verifyQUuid(questionUuid);
-//        final UserEntity signedinUserEntity = deleteQuestionBusinessService.verifyAuthToken(bearerToken[1]);
         final UserEntity signedinUserEntity = deleteQuestionBusinessService.verifyAuthToken(accessToken);
         final String Uuid = deleteQuestionBusinessService.deleteQuestion( questionEntityToDelete,signedinUserEntity);
 

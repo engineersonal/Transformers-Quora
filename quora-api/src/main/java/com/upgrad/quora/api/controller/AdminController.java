@@ -18,6 +18,15 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    /** Admin deletes a user
+     * @param userId: to delete a specific user
+     * @param authorization: access token to authenticate user
+     * @return UserDeleteResponse entity
+     * @throws AuthorizationFailedException ATHR-001: if User has not signed in
+     *                                      ATHR-002: if the User is signed out
+     *                                      ATHR-003: Unauthorized Access, Entered user is not an admin
+     * @throws UserNotFoundException USR-001: User with entered uuid to be deleted does not exist
+     */
     //deleteUser method considers userid and authorization as input parameters for deleting a user. Only Admin can delete a user
     @RequestMapping(method = RequestMethod.DELETE , path = "/admin/user/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDeleteResponse> deleteUser(@PathVariable("userId") final String userid, @RequestHeader("authorization")
