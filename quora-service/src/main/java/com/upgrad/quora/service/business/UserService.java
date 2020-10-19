@@ -24,6 +24,7 @@ public class UserService {
     @Autowired
     PasswordCryptographyProvider passwordCryptographyProvider;
 
+    //getUser method considers user id and access token as inputs and gets the profile details of a user
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity getUser(String targetUuid, String token) throws AuthorizationFailedException, UserNotFoundException {
 

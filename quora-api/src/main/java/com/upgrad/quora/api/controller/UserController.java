@@ -109,11 +109,11 @@ public class UserController {
      * @throws SignOutRestrictedException if the
      */
    @RequestMapping(method=RequestMethod.POST,path="/user/signout",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-   public ResponseEntity<SignoutResponse> logout(@RequestHeader("accessToken") final String accessToken)throws SignOutRestrictedException {
-       String [] bearerToken = accessToken.split("Bearer ");
+   public ResponseEntity<SignoutResponse> logout(@RequestHeader("authorization") final String accessToken)throws SignOutRestrictedException {
+//       String [] bearerToken = accessToken.split("Bearer ");
        //call signoutservice method verifyAuthToken
-       final UserAuthTokenEntity userAuthTokenEntity=signoutBusinessService.verifyAuthToken(bearerToken[1]);
-
+//       final UserAuthTokenEntity userAuthTokenEntity=signoutBusinessService.verifyAuthToken(bearerToken[1]);
+       final UserAuthTokenEntity userAuthTokenEntity=signoutBusinessService.verifyAuthToken(accessToken);
        SignoutResponse signoutResponse=new SignoutResponse()
                .id(userAuthTokenEntity.getUuid())
                .message("SIGNED OUT SUCCESSFULLY");

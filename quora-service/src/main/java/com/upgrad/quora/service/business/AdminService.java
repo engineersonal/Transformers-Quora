@@ -21,6 +21,7 @@ public class AdminService {
     @Autowired
     UserDao userDao;
 
+    //deleteUser method considers user id and access token as input parameters for deleting a user.
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity deleteUser(String targetUuid, String token) throws AuthorizationFailedException, UserNotFoundException {
 
@@ -37,7 +38,6 @@ public class AdminService {
             throw new AuthorizationFailedException("ATHR-003", "Unauthorized Access, Entered user is not an admin");
         }
 
-        System.out.println(targetUuid + " uuid");
         UserEntity userEntity = userDao.getUserByUuid(targetUuid);
         if (userEntity == null) {
             throw new UserNotFoundException("USR-001", "User with entered uuid to be deleted does not exist");
