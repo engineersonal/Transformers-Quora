@@ -22,6 +22,17 @@ public class AnswerController {
     @Autowired
     private AnswerService answerService;
 
+    /**
+     * This API creates an answer in the database.
+     *
+     * @param accessToken To authenticate the user who is trying to create an answer.
+     * @param questionId Id of the question for which the answer is being created.
+     * @param answerRequest Contains the answer content.
+     * @return
+     * @throws AuthorizationFailedException ATHR-001 If the user has not signed in and ATHR-002 If the
+     *     user is already signed out
+     * @throws InvalidQuestionException QUES-001 if the question doesn't exist in database.
+     */
     @RequestMapping(method = RequestMethod.POST,path = "/question/{questionId}/answer/create", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerResponse> createAnswer(
             @RequestHeader("authorization") final String accessToken,
@@ -36,6 +47,17 @@ public class AnswerController {
         return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.CREATED);
     }
 
+    /**
+     * This API edits the answer which already exist in the database.
+     *
+     * @param accessToken To authenticate the user who is trying to edit the answer.
+     * @param answerId Id of the answe which is to be edited.
+     * @param answerEditRequest Contains the new content of the answer.
+     * @return
+     * @throws AuthorizationFailedException ATHR-001 If the user has not signed in and ATHR-002 If the
+     *     user is already signed out and ATHR-003 if the user is not the owner of the answer.
+     * @throws AnswerNotFoundException ANS-001 if the answer is not found in the database.
+     */
     @RequestMapping(method = RequestMethod.PUT, path = "/answer/edit/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerEditResponse> editAnswer(
             @RequestHeader("authorization") final String accessToken,
@@ -48,6 +70,15 @@ public class AnswerController {
         return new ResponseEntity<AnswerEditResponse>(answerEditResponse, HttpStatus.OK);
     }
 
+    /**
+     * delete a answer using answerId
+     *
+     * @param answerId id of the answer to be delete.
+     * @param accessToken token to authenticate user.
+     * @return Id and status of the answer deleted.
+     * @throws AuthorizationFailedException In case the access token is invalid.
+     * @throws AnswerNotFoundException if answer with answerId doesn't exist.
+     */
     @RequestMapping(method = RequestMethod.DELETE, path = "/answer/delete/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerDeleteResponse> deleteAnswer(
             @RequestHeader("authorization") final String accessToken,
@@ -58,6 +89,17 @@ public class AnswerController {
         return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse, HttpStatus.OK);
     }
 
+    /**
+     * Get all answers to the question.
+     *
+     * @param questionId to fetch all the answers for a question.
+     * @param accessToken access token to authenticate user.
+     * @return List of AnswerDetailsResponse
+     * @throws AuthorizationFailedException ATHR-001 - if User has not signed in. ATHR-002 if the User
+     *     is signed out.
+     * @throws InvalidQuestionException The question with entered uuid whose details are to be seen
+     *     does not exist.
+     */
     @RequestMapping(method = RequestMethod.GET, path = "/answer/all/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion(
             @RequestHeader("authorization") final String accessToken,
